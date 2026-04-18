@@ -1,0 +1,28 @@
+SEU ANIMAL QUANDO TIVER  FAZENDO SQQLITE LEMBRA DISSO::::::
+
+
+
+
+
+
+
+PASSO 1.
+
+ABRE O TERMINAL DENTRO DO BANCO DE DADOS (DATABASE)
+
+PASSO 2
+
+NO POWERSGHEEEEEELLL (MACACO) DIGITA  .\sqlite3.exe database\bancodedados.db
+
+PASSO 3 
+
+NO SQLITE  DIGITA .READ DATABASE/SCRIPT.SQL
+
+LEMBRE-SE
+
+PARA COMPILAR EXECUTE NO TERMINAL
+gcc main.c sqlite3.c -o programa.exe
+
+e depois para executar o programa no TERMINAL
+
+.\programa.exe

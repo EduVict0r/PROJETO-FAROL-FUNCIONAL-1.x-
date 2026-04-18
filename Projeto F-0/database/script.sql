@@ -21,19 +21,14 @@ CREATE TABLE endereco (
 CREATE TABLE usuario (
     id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
     nome_usuario TEXT NOT NULL CHECK(length(nome_usuario) <= 90),
-    nome_social TEXT CHECK(length(nome_social) <= 90),
-    sexo_usuario TEXT NOT NULL CHECK(sexo_usuario IN ('masculino', 'feminino', 'outros')),
-    contato TEXT NOT NULL UNIQUE CHECK(length(contato) <= 12),
-    email TEXT NOT NULL UNIQUE CHECK(length(email) <= 80),
     cpf_usuario TEXT NOT NULL UNIQUE CHECK(length(cpf_usuario) = 11),
     senha TEXT NOT NULL CHECK(length(senha) <= 255),
-    fk_endereco INTEGER,
-    FOREIGN KEY (fk_endereco) REFERENCES endereco(id_endereco)
+    nascimento TEXT NOT NULL
 );
 
 CREATE TABLE chamada_emergencia (
     id_chamada_emergencia INTEGER PRIMARY KEY AUTOINCREMENT,
-    numero_emergencia INTEGER
+    numero_emergencia INTEGER NOT NULL
 );
 
 CREATE TABLE tipo_ocorrencia (
@@ -42,6 +37,7 @@ CREATE TABLE tipo_ocorrencia (
 );
 
 CREATE TABLE registro (
+    id_registro INTEGER PRIMARY KEY AUTOINCREMENT,
     data_hora_registro DATETIME DEFAULT CURRENT_TIMESTAMP,
     fk_usuario INTEGER,
     fk_chamada_emergencia INTEGER,
@@ -60,34 +56,26 @@ CREATE TABLE classificacao_ocorrencia (
 
 CREATE TABLE ocorrencia (
     id_ocorrencia INTEGER PRIMARY KEY AUTOINCREMENT,
-    descricao_ocorrencia TEXT CHECK(length(descricao_ocorrencia) <= 1000),
+    descricao_ocorrencia TEXT NOT NULL CHECK(length(descricao_ocorrencia) <= 1000),
     latitude REAL NOT NULL,
     longitude REAL NOT NULL,
-    data_hora DATETIME NOT NULL,
+    data_hora TEXT NOT NULL,
+    bairro_ocorrencia TEXT NOT NULL,
+    fk_usuario INTEGER NOT NULL,
     fk_classificacao_ocorrencia INTEGER,
+    FOREIGN KEY (fk_usuario) REFERENCES usuario(id_usuario),
     FOREIGN KEY (fk_classificacao_ocorrencia) REFERENCES classificacao_ocorrencia(id_classificacao_ocorrencia)
 );
 
-INSERT INTO chamada_emergencia (numero_emergencia)
-VALUES (190);
+INSERT INTO chamada_emergencia (numero_emergencia) VALUES (190);
+INSERT INTO chamada_emergencia (numero_emergencia) VALUES (192);
+INSERT INTO chamada_emergencia (numero_emergencia) VALUES (193);
 
-INSERT INTO chamada_emergencia (numero_emergencia)
-VALUES (192);
+INSERT INTO tipo_ocorrencia (instituicao) VALUES ('Policial');
+INSERT INTO tipo_ocorrencia (instituicao) VALUES ('Samu');
+INSERT INTO tipo_ocorrencia (instituicao) VALUES ('Bombeiro');
 
-INSERT INTO chamada_emergencia (numero_emergencia)
-VALUES (193);
-
-INSERT INTO tipo_ocorrencia (instituicao)
-VALUES ('Policial');
-
-INSERT INTO tipo_ocorrencia (instituicao)
-VALUES ('Samu');
-
-INSERT INTO tipo_ocorrencia (instituicao)
-VALUES ('Bombeiro');
-
-INSERT INTO classificacao_ocorrencia (nome_classificacao, fk_tipo_ocorrencia) 
-VALUES
+INSERT INTO classificacao_ocorrencia (nome_classificacao, fk_tipo_ocorrencia) VALUES
 ('Homicidio', 1),
 ('Furto', 1),
 ('Estupro', 1),
@@ -105,3 +93,6 @@ VALUES
 ('Desabamento', 3),
 ('Vazamento de Gás', 3),
 ('Resgate Aquático', 3);
+
+INSERT INTO administrador (nome_admin, email_admin, cpf_admin, senha_admin)
+VALUES ('Administrador', 'admin@farol.com', '12345678901', '1234');

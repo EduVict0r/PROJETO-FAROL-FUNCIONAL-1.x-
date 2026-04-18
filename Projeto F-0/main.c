@@ -209,10 +209,12 @@ void cadastrar() {
 
         if (stringVazia(u.cpf)) {
             printf("CPF nao pode ser vazio.\n");
+        } else if (strlen(u.cpf) != 11) {
+            printf("CPF deve ter exatamente 11 digitos.\n");
         } else if (cpfExiste(u.cpf)) {
             printf("CPF ja cadastrado.\n");
         }
-    } while (stringVazia(u.cpf) || cpfExiste(u.cpf));
+    } while (stringVazia(u.cpf) || strlen(u.cpf) != 11 || cpfExiste(u.cpf));
 
     do {
         printf("Senha: ");
@@ -304,7 +306,7 @@ void novaOcorrencia() {
     sqlite3_stmt *stmt;
     const char *sql =
         "INSERT INTO ocorrencia "
-        "(descricao_ocorrencia, latitude, longitude, data_hora, bairro_ocorrencia, fk_usuario) "
+        "(descricao_ocorrencia, bairro_ocorrencia, latitude, longitude, data_hora, fk_usuario) "
         "VALUES (?, ?, ?, ?, ?, ?);";
 
     titulo("NOVA OCORRENCIA");
@@ -357,10 +359,10 @@ void novaOcorrencia() {
     }
 
     sqlite3_bind_text(stmt, 1, o.descricao, -1, SQLITE_STATIC);
-    sqlite3_bind_double(stmt, 2, o.lat);
-    sqlite3_bind_double(stmt, 3, o.lon);
-    sqlite3_bind_text(stmt, 4, o.dataHora, -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmt, 5, o.bairro, -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, o.bairro, -1, SQLITE_STATIC);
+    sqlite3_bind_double(stmt, 3, o.lat);
+    sqlite3_bind_double(stmt, 4, o.lon);
+    sqlite3_bind_text(stmt, 5, o.dataHora, -1, SQLITE_STATIC);
     sqlite3_bind_int(stmt, 6, idUsuarioLogado);
 
     if (sqlite3_step(stmt) == SQLITE_DONE) {
